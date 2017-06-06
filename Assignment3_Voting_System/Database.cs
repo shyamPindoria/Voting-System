@@ -15,7 +15,6 @@ namespace Assignment3_Voting_System
         {
             this.table = new DataTable();
         }
-
-
+        //
     }
 }
