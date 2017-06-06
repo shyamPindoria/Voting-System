@@ -13,7 +13,7 @@ namespace Assignment3_Voting_System
 {
     public partial class MainForm : Form
     {
-
+        //Table Databases
         Database votesDatabase;
         Database preferencesDatabase;
 
