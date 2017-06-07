@@ -46,7 +46,7 @@ namespace Assignment3_Voting_System
                     StreamReader reader = new StreamReader(stream); //Readed to read lines from the file
 
                     string[] headers = reader.ReadLine().Split(','); //The first line which contains the headers of the columns
-                    votesTable = new DataTable();
+                    this.votesDatabase = new Database();
                     DataColumn[] columns = new DataColumn[headers.Length];
 
                     for (int i = 0; i < headers.Length; i++)
@@ -54,18 +54,18 @@ namespace Assignment3_Voting_System
                         columns[i] = new DataColumn(headers[i].Trim('\"'));
                     }
 
-                    votesTable.Columns.AddRange(columns);
+                    this.votesDatabase.addColumns(columns);
                     //Read lines until the file comes to an end
 
                     while (!reader.EndOfStream)
                     {
                         // Create and populate the datatable
                         string[] row = reader.ReadLine().Split(',');
-                        votesTable.Rows.Add(row);
+                        this.votesDatabase.addRow(row);
                     }
 
                     //Set the data source
-                    votesGridView.DataSource = votesTable;
+                    votesGridView.DataSource = this.votesDatabase.table;
                     votesGridView.AutoResizeColumns();
                 }
             }
@@ -89,8 +89,8 @@ namespace Assignment3_Voting_System
 
         private void addCandidate_Click(object sender, EventArgs e)
         {
-            votesTable.Columns.Add(this.candidateTextBox.Text);
-            votesGridView.DataSource = votesTable;
+            this.votesDatabase.addColumn(this.candidateTextBox.Text);
+            votesGridView.DataSource = this.votesDatabase.table;
             votesGridView.AutoResizeColumns();
             this.candidateTextBox.Text = "";
 
