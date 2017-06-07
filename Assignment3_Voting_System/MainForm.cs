@@ -24,6 +24,8 @@ namespace Assignment3_Voting_System
             InitializeComponent();
             this.votesDatabase = new Database();
             this.preferencesDatabase = new Database();
+            this.preferencesDatabase.addColumns(new string[]{ "Candidates", "Votes" });
+            this.firstPreferencesGridView.DataSource = this.preferencesDatabase.table;
         }
 
         #endregion
@@ -47,11 +49,11 @@ namespace Assignment3_Voting_System
 
                     string[] headers = reader.ReadLine().Split(','); //The first line which contains the headers of the columns
                     this.votesDatabase = new Database();
-                    DataColumn[] columns = new DataColumn[headers.Length];
+                    string[] columns = new string[headers.Length];
 
                     for (int i = 0; i < headers.Length; i++)
                     {
-                        columns[i] = new DataColumn(headers[i].Trim('\"'));
+                        columns[i] = headers[i].Trim('\"');
                     }
 
                     this.votesDatabase.addColumns(columns);
@@ -67,6 +69,7 @@ namespace Assignment3_Voting_System
                     //Set the data source
                     votesGridView.DataSource = this.votesDatabase.table;
                     votesGridView.AutoResizeColumns();
+                    this.votesDatabase.getCandidates();
                 }
             }
         }
@@ -89,7 +92,7 @@ namespace Assignment3_Voting_System
 
         private void addCandidate_Click(object sender, EventArgs e)
         {
-            this.votesDatabase.addColumn(this.candidateTextBox.Text);
+            this.votesDatabase.addColumn(this.candidateTextBox.Text.TrimEnd());
             votesGridView.DataSource = this.votesDatabase.table;
             votesGridView.AutoResizeColumns();
             this.candidateTextBox.Text = "";
@@ -98,7 +101,7 @@ namespace Assignment3_Voting_System
 
         private void candidateTextBox_TextChanged(object sender, EventArgs e)
         {
-            this.candidateTextBox.Text = this.candidateTextBox.Text.Trim();
+            this.candidateTextBox.Text = this.candidateTextBox.Text.TrimStart();
             if (!this.candidateTextBox.Text.Equals(""))
             {
                 this.addCandidate.Enabled = true;
@@ -110,6 +113,11 @@ namespace Assignment3_Voting_System
         }
 
         private void votesTable_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
+        }
+
+        private void votesGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
 
         }

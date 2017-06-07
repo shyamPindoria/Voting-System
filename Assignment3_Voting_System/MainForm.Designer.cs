@@ -40,6 +40,7 @@
             this.candidateTextBox = new System.Windows.Forms.TextBox();
             this.firstPreferencesGroupBox = new System.Windows.Forms.GroupBox();
             this.firstPreferencesGridView = new System.Windows.Forms.DataGridView();
+            this.calculate = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.votesGridView)).BeginInit();
             this.votesTableBox.SuspendLayout();
@@ -54,7 +55,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(729, 24);
+            this.menuStrip.Size = new System.Drawing.Size(851, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -99,13 +100,15 @@
             this.votesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.votesGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.votesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.votesGridView.Location = new System.Drawing.Point(6, 19);
             this.votesGridView.Name = "votesGridView";
             this.votesGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.votesGridView.ShowEditingIcon = false;
-            this.votesGridView.Size = new System.Drawing.Size(496, 474);
+            this.votesGridView.Size = new System.Drawing.Size(560, 481);
             this.votesGridView.TabIndex = 1;
+            this.votesGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.votesGridView_CellValueChanged);
             this.votesGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.votesTable_RowsAdded);
             // 
             // votesTableBox
@@ -116,7 +119,7 @@
             this.votesTableBox.Controls.Add(this.votesGridView);
             this.votesTableBox.Location = new System.Drawing.Point(12, 27);
             this.votesTableBox.Name = "votesTableBox";
-            this.votesTableBox.Size = new System.Drawing.Size(508, 499);
+            this.votesTableBox.Size = new System.Drawing.Size(572, 506);
             this.votesTableBox.TabIndex = 2;
             this.votesTableBox.TabStop = false;
             this.votesTableBox.Text = "Votes Overview";
@@ -126,9 +129,9 @@
             this.newCandidaetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newCandidaetBox.Controls.Add(this.addCandidate);
             this.newCandidaetBox.Controls.Add(this.candidateTextBox);
-            this.newCandidaetBox.Location = new System.Drawing.Point(527, 28);
+            this.newCandidaetBox.Location = new System.Drawing.Point(597, 28);
             this.newCandidaetBox.Name = "newCandidaetBox";
-            this.newCandidaetBox.Size = new System.Drawing.Size(200, 49);
+            this.newCandidaetBox.Size = new System.Drawing.Size(252, 49);
             this.newCandidaetBox.TabIndex = 3;
             this.newCandidaetBox.TabStop = false;
             this.newCandidaetBox.Text = "Add New Candidate";
@@ -136,7 +139,7 @@
             // addCandidate
             // 
             this.addCandidate.Enabled = false;
-            this.addCandidate.Location = new System.Drawing.Point(118, 18);
+            this.addCandidate.Location = new System.Drawing.Point(166, 18);
             this.addCandidate.Name = "addCandidate";
             this.addCandidate.Size = new System.Drawing.Size(76, 23);
             this.addCandidate.TabIndex = 1;
@@ -148,7 +151,7 @@
             // 
             this.candidateTextBox.Location = new System.Drawing.Point(6, 20);
             this.candidateTextBox.Name = "candidateTextBox";
-            this.candidateTextBox.Size = new System.Drawing.Size(106, 20);
+            this.candidateTextBox.Size = new System.Drawing.Size(154, 20);
             this.candidateTextBox.TabIndex = 0;
             this.candidateTextBox.TextChanged += new System.EventHandler(this.candidateTextBox_TextChanged);
             // 
@@ -156,30 +159,46 @@
             // 
             this.firstPreferencesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.firstPreferencesGroupBox.Controls.Add(this.calculate);
             this.firstPreferencesGroupBox.Controls.Add(this.firstPreferencesGridView);
-            this.firstPreferencesGroupBox.Location = new System.Drawing.Point(527, 84);
+            this.firstPreferencesGroupBox.Location = new System.Drawing.Point(590, 84);
             this.firstPreferencesGroupBox.Name = "firstPreferencesGroupBox";
-            this.firstPreferencesGroupBox.Size = new System.Drawing.Size(200, 442);
+            this.firstPreferencesGroupBox.Size = new System.Drawing.Size(259, 449);
             this.firstPreferencesGroupBox.TabIndex = 4;
             this.firstPreferencesGroupBox.TabStop = false;
             this.firstPreferencesGroupBox.Text = "First Preferences";
             // 
             // firstPreferencesGridView
             // 
+            this.firstPreferencesGridView.AllowUserToResizeColumns = false;
+            this.firstPreferencesGridView.AllowUserToResizeRows = false;
             this.firstPreferencesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.firstPreferencesGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.firstPreferencesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.firstPreferencesGridView.Location = new System.Drawing.Point(7, 20);
             this.firstPreferencesGridView.Name = "firstPreferencesGridView";
-            this.firstPreferencesGridView.Size = new System.Drawing.Size(183, 416);
+            this.firstPreferencesGridView.ReadOnly = true;
+            this.firstPreferencesGridView.RowHeadersVisible = false;
+            this.firstPreferencesGridView.Size = new System.Drawing.Size(242, 394);
             this.firstPreferencesGridView.TabIndex = 0;
+            // 
+            // calculate
+            // 
+            this.calculate.Location = new System.Drawing.Point(173, 420);
+            this.calculate.Name = "calculate";
+            this.calculate.Size = new System.Drawing.Size(75, 23);
+            this.calculate.TabIndex = 1;
+            this.calculate.Text = "Calculate";
+            this.calculate.UseVisualStyleBackColor = true;
+            this.calculate.Click += new System.EventHandler(this.candidateTextBox_TextChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 538);
+            this.ClientSize = new System.Drawing.Size(851, 545);
             this.Controls.Add(this.firstPreferencesGroupBox);
             this.Controls.Add(this.newCandidaetBox);
             this.Controls.Add(this.votesTableBox);
@@ -214,6 +233,7 @@
         private System.Windows.Forms.TextBox candidateTextBox;
         private System.Windows.Forms.GroupBox firstPreferencesGroupBox;
         private System.Windows.Forms.DataGridView firstPreferencesGridView;
+        private System.Windows.Forms.Button calculate;
     }
 }
 
