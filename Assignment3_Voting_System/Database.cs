@@ -42,7 +42,14 @@ namespace Assignment3_Voting_System
             String[] row = new String[obj.Length];
             for (int i = 0; i < row.Length; i++)
             {
-                row[i] = (String)obj[i];
+                if (!obj[i].ToString().Equals(""))
+                {
+                    row[i] = (String)obj[i];
+                }
+                else
+                {
+                    row[i] = "";
+                }
             }
                 return row;
         }
@@ -50,6 +57,11 @@ namespace Assignment3_Voting_System
         public int getColumnCount()
         {
             return this.table.Columns.Count;
+        }
+
+        public int getRowCount()
+        {
+            return this.table.Rows.Count;
         }
 
         public string[] getCandidates()
@@ -66,7 +78,7 @@ namespace Assignment3_Voting_System
         {
             this.table.Clear();
             int[] firstCounts = new int[votesDatabase.getColumnCount()];
-            for (int i = 0; i < firstCounts.Length; i++)
+            for (int i = 0; i < votesDatabase.getRowCount(); i++)
             {
                 string[] currentRow = votesDatabase.getRow(i);
                 for (int j = 0; j < currentRow.Length; j++) {

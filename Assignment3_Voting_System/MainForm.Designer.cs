@@ -39,7 +39,6 @@
             this.addCandidate = new System.Windows.Forms.Button();
             this.candidateTextBox = new System.Windows.Forms.TextBox();
             this.firstPreferencesGroupBox = new System.Windows.Forms.GroupBox();
-            this.calculate = new System.Windows.Forms.Button();
             this.firstPreferencesGridView = new System.Windows.Forms.DataGridView();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.votesGridView)).BeginInit();
@@ -56,8 +55,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(1135, 28);
+            this.menuStrip.Size = new System.Drawing.Size(851, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -68,14 +66,14 @@
             this.exportMenuItem,
             this.exitMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // importMenuItem
             // 
             this.importMenuItem.Name = "importMenuItem";
             this.importMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.importMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.importMenuItem.Size = new System.Drawing.Size(147, 22);
             this.importMenuItem.Text = "&Import";
             this.importMenuItem.Click += new System.EventHandler(this.importMenuItem_Click);
             // 
@@ -83,7 +81,7 @@
             // 
             this.exportMenuItem.Name = "exportMenuItem";
             this.exportMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.exportMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.exportMenuItem.Size = new System.Drawing.Size(147, 22);
             this.exportMenuItem.Text = "&Export";
             this.exportMenuItem.Click += new System.EventHandler(this.exportMenuItem_Click);
             // 
@@ -91,7 +89,7 @@
             // 
             this.exitMenuItem.Name = "exitMenuItem";
             this.exitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.exitMenuItem.Size = new System.Drawing.Size(147, 22);
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
@@ -104,27 +102,23 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.votesGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.votesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.votesGridView.Location = new System.Drawing.Point(8, 23);
-            this.votesGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.votesGridView.Location = new System.Drawing.Point(6, 19);
             this.votesGridView.Name = "votesGridView";
             this.votesGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.votesGridView.ShowEditingIcon = false;
-            this.votesGridView.Size = new System.Drawing.Size(747, 592);
+            this.votesGridView.Size = new System.Drawing.Size(560, 481);
             this.votesGridView.TabIndex = 1;
-            this.votesGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.votesGridView_CellEndEdit);
-
-     // 
+            this.votesGridView.CurrentCellChanged += new System.EventHandler(this.votesGridView_CurrentCellChanged);
+            // 
             // votesTableBox
             // 
             this.votesTableBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.votesTableBox.Controls.Add(this.votesGridView);
-            this.votesTableBox.Location = new System.Drawing.Point(16, 33);
-            this.votesTableBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.votesTableBox.Location = new System.Drawing.Point(12, 27);
             this.votesTableBox.Name = "votesTableBox";
-            this.votesTableBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.votesTableBox.Size = new System.Drawing.Size(763, 623);
+            this.votesTableBox.Size = new System.Drawing.Size(572, 506);
             this.votesTableBox.TabIndex = 2;
             this.votesTableBox.TabStop = false;
             this.votesTableBox.Text = "Votes Overview";
@@ -134,11 +128,9 @@
             this.newCandidaetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newCandidaetBox.Controls.Add(this.addCandidate);
             this.newCandidaetBox.Controls.Add(this.candidateTextBox);
-            this.newCandidaetBox.Location = new System.Drawing.Point(796, 34);
-            this.newCandidaetBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.newCandidaetBox.Location = new System.Drawing.Point(597, 28);
             this.newCandidaetBox.Name = "newCandidaetBox";
-            this.newCandidaetBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.newCandidaetBox.Size = new System.Drawing.Size(336, 60);
+            this.newCandidaetBox.Size = new System.Drawing.Size(252, 49);
             this.newCandidaetBox.TabIndex = 3;
             this.newCandidaetBox.TabStop = false;
             this.newCandidaetBox.Text = "Add New Candidate";
@@ -146,10 +138,9 @@
             // addCandidate
             // 
             this.addCandidate.Enabled = false;
-            this.addCandidate.Location = new System.Drawing.Point(221, 22);
-            this.addCandidate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addCandidate.Location = new System.Drawing.Point(166, 18);
             this.addCandidate.Name = "addCandidate";
-            this.addCandidate.Size = new System.Drawing.Size(101, 28);
+            this.addCandidate.Size = new System.Drawing.Size(76, 23);
             this.addCandidate.TabIndex = 1;
             this.addCandidate.Text = "Add";
             this.addCandidate.UseVisualStyleBackColor = true;
@@ -157,10 +148,9 @@
             // 
             // candidateTextBox
             // 
-            this.candidateTextBox.Location = new System.Drawing.Point(8, 25);
-            this.candidateTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.candidateTextBox.Location = new System.Drawing.Point(6, 20);
             this.candidateTextBox.Name = "candidateTextBox";
-            this.candidateTextBox.Size = new System.Drawing.Size(204, 22);
+            this.candidateTextBox.Size = new System.Drawing.Size(154, 20);
             this.candidateTextBox.TabIndex = 0;
             this.candidateTextBox.TextChanged += new System.EventHandler(this.candidateTextBox_TextChanged);
             // 
@@ -168,30 +158,18 @@
             // 
             this.firstPreferencesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.firstPreferencesGroupBox.Controls.Add(this.calculate);
             this.firstPreferencesGroupBox.Controls.Add(this.firstPreferencesGridView);
-            this.firstPreferencesGroupBox.Location = new System.Drawing.Point(787, 103);
-            this.firstPreferencesGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.firstPreferencesGroupBox.Location = new System.Drawing.Point(590, 84);
             this.firstPreferencesGroupBox.Name = "firstPreferencesGroupBox";
-            this.firstPreferencesGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.firstPreferencesGroupBox.Size = new System.Drawing.Size(345, 553);
+            this.firstPreferencesGroupBox.Size = new System.Drawing.Size(259, 449);
             this.firstPreferencesGroupBox.TabIndex = 4;
             this.firstPreferencesGroupBox.TabStop = false;
             this.firstPreferencesGroupBox.Text = "First Preferences";
             // 
-            // calculate
-            // 
-            this.calculate.Location = new System.Drawing.Point(231, 517);
-            this.calculate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.calculate.Name = "calculate";
-            this.calculate.Size = new System.Drawing.Size(100, 28);
-            this.calculate.TabIndex = 1;
-            this.calculate.Text = "Calculate";
-            this.calculate.UseVisualStyleBackColor = true;
-            this.calculate.Click += new System.EventHandler(this.candidateTextBox_TextChanged);
-            // 
             // firstPreferencesGridView
             // 
+            this.firstPreferencesGridView.AllowUserToAddRows = false;
+            this.firstPreferencesGridView.AllowUserToDeleteRows = false;
             this.firstPreferencesGridView.AllowUserToResizeColumns = false;
             this.firstPreferencesGridView.AllowUserToResizeRows = false;
             this.firstPreferencesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -199,25 +177,23 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.firstPreferencesGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.firstPreferencesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.firstPreferencesGridView.Location = new System.Drawing.Point(9, 25);
-            this.firstPreferencesGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.firstPreferencesGridView.Location = new System.Drawing.Point(7, 20);
             this.firstPreferencesGridView.Name = "firstPreferencesGridView";
             this.firstPreferencesGridView.ReadOnly = true;
             this.firstPreferencesGridView.RowHeadersVisible = false;
-            this.firstPreferencesGridView.Size = new System.Drawing.Size(323, 485);
+            this.firstPreferencesGridView.Size = new System.Drawing.Size(242, 423);
             this.firstPreferencesGridView.TabIndex = 0;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1135, 671);
+            this.ClientSize = new System.Drawing.Size(851, 545);
             this.Controls.Add(this.firstPreferencesGroupBox);
             this.Controls.Add(this.newCandidaetBox);
             this.Controls.Add(this.votesTableBox);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainForm";
             this.Text = "Voting System";
             this.menuStrip.ResumeLayout(false);
@@ -247,7 +223,6 @@
         private System.Windows.Forms.TextBox candidateTextBox;
         private System.Windows.Forms.GroupBox firstPreferencesGroupBox;
         private System.Windows.Forms.DataGridView firstPreferencesGridView;
-        private System.Windows.Forms.Button calculate;
     }
 }
 

@@ -57,8 +57,8 @@ namespace Assignment3_Voting_System
                     }
 
                     this.votesDatabase.addColumns(columns);
-                    //Read lines until the file comes to an end
 
+                    //Read lines until the file comes to an end
                     while (!reader.EndOfStream)
                     {
                         // Create and populate the datatable
@@ -69,12 +69,7 @@ namespace Assignment3_Voting_System
                     //Set the data source
                     votesGridView.DataSource = this.votesDatabase.table;
                     votesGridView.AutoResizeColumns();
-                    this.votesDatabase.getCandidates();
-
-                    // set preferences table
-
-                    this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
-                    
+                    this.votesDatabase.getCandidates(); 
                 }
             }
         }
@@ -85,15 +80,8 @@ namespace Assignment3_Voting_System
         }
 
         #endregion
-
-        #region Quit Application
-
-        private void exitMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        #endregion
+ 
+        #region Add Candidate
 
         private void addCandidate_Click(object sender, EventArgs e)
         {
@@ -117,10 +105,25 @@ namespace Assignment3_Voting_System
             }
         }
 
-        private void votesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        #endregion
+
+        #region Update First Preferences Table
+
+        private void votesGridView_CurrentCellChanged(object sender, EventArgs e)
         {
             this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
         }
+
+        #endregion
+
+        #region Quit Application
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
 
     }
 }
