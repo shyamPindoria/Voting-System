@@ -70,6 +70,11 @@ namespace Assignment3_Voting_System
                     votesGridView.DataSource = this.votesDatabase.table;
                     votesGridView.AutoResizeColumns();
                     this.votesDatabase.getCandidates();
+
+                    // set preferences table
+
+                    this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
+                    
                 }
             }
         }
@@ -112,16 +117,10 @@ namespace Assignment3_Voting_System
             }
         }
 
-        private void votesTable_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        private void votesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
         }
-
-        private void votesGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
 
     }
 }
