@@ -111,16 +111,60 @@ namespace Assignment3_Voting_System
 
         private void votesGridView_CurrentCellChanged(object sender, EventArgs e)
         {
+
+            validateTable();
             this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
+
+
         }
 
         #endregion
+
+        public void validateTable()
+        {
+            for (int i = 0; i < this.votesGridView.Rows.Count; i++)
+            {
+                string[] row = this.votesDatabase.getRow(i);
+                if(!votesDatabase.isValid(row)){
+                    this.votesGridView.Rows[i].HeaderCell.Style.BackColor = Color.Red;
+                }
+                else
+                {
+                    this.votesGridView.Rows[i].HeaderCell.Style.BackColor = SystemColors.Control;
+                }
+
+
+            }
+        }
 
         #region Quit Application
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        #endregion
+
+        #region Update Row Headers
+
+        private void updateRowHeaders()
+        {
+            for (int i = 0; i < this.votesGridView.Rows.Count; i++)
+            {
+                this.votesGridView.Rows[i].HeaderCell.Value = (i + 1).ToString();
+            }
+            this.votesGridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+        }
+
+        private void votesGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            updateRowHeaders();
+        }
+
+        private void votesGridView_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            updateRowHeaders();
         }
 
         #endregion

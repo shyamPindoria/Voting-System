@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,11 +99,14 @@
             // 
             this.votesGridView.AllowUserToResizeColumns = false;
             this.votesGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.votesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.votesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.votesGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.votesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.votesGridView.EnableHeadersVisualStyles = false;
             this.votesGridView.Location = new System.Drawing.Point(6, 19);
             this.votesGridView.Name = "votesGridView";
             this.votesGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -109,6 +114,8 @@
             this.votesGridView.Size = new System.Drawing.Size(560, 481);
             this.votesGridView.TabIndex = 1;
             this.votesGridView.CurrentCellChanged += new System.EventHandler(this.votesGridView_CurrentCellChanged);
+            this.votesGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.votesGridView_RowsAdded);
+            this.votesGridView.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.votesGridView_RowsRemoved);
             // 
             // votesTableBox
             // 
@@ -172,6 +179,8 @@
             this.firstPreferencesGridView.AllowUserToDeleteRows = false;
             this.firstPreferencesGridView.AllowUserToResizeColumns = false;
             this.firstPreferencesGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.firstPreferencesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.firstPreferencesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));

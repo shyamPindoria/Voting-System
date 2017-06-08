@@ -35,24 +35,55 @@ namespace Assignment3_Voting_System
         }
 
         public string[] getRow(int index)
-
-           
         {
-            Object[] obj = this.table.Rows[index].ItemArray;
-            String[] row = new String[obj.Length];
-            for (int i = 0; i < row.Length; i++)
+            try
             {
-                if (!obj[i].ToString().Equals(""))
+                Object[] obj = this.table.Rows[index].ItemArray;
+                String[] row = new String[obj.Length];
+
+                for (int i = 0; i < row.Length; i++)
                 {
-                    row[i] = (String)obj[i];
+                    if (!obj[i].ToString().Equals(""))
+                    {
+                        row[i] = (String)obj[i];
+                    }
+                    else
+                    {
+                        row[i] = "";
+                    }
                 }
-                else
-                {
-                    row[i] = "";
-                }
-            }
+
                 return row;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return new string[0];
+
+            }
         }
+
+        public Boolean isValid(string[] row)
+        {
+            if (row.Length == getCandidates().Length)
+            {
+                for (int i = 1; i <= row.Length; i++)
+                {
+                    if (!row.Contains(i.ToString()))
+                    {
+                        return false;
+                    }
+
+                }
+                return true;
+            }
+
+
+
+
+            return false;
+        }
+
 
         public int getColumnCount()
         {
@@ -63,6 +94,8 @@ namespace Assignment3_Voting_System
         {
             return this.table.Rows.Count;
         }
+
+
 
         public string[] getCandidates()
         {
@@ -81,17 +114,25 @@ namespace Assignment3_Voting_System
             for (int i = 0; i < votesDatabase.getRowCount(); i++)
             {
                 string[] currentRow = votesDatabase.getRow(i);
-                for (int j = 0; j < currentRow.Length; j++) {
-                    if (currentRow[j].Equals("1"))
+
+                if (votesDatabase.isValid(currentRow))
+                {
+                    for (int j = 0; j < currentRow.Length; j++)
                     {
-                        firstCounts[j]++;
+                        if (currentRow[j].Equals("1"))
+                        {
+                            firstCounts[j]++;
+                        }
                     }
                 }
+
+
+                
             }
             string[] columns = votesDatabase.getCandidates();
             for (int i = 0; i < firstCounts.Length; i++)
             {
-                this.addRow(new string[] {columns[i], firstCounts[i].ToString()});
+                this.addRow(new string[] { columns[i], firstCounts[i].ToString() });
             }
         }
 
