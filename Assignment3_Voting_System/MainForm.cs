@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Assignment3_Voting_System
 {
     public partial class MainForm : Form
     {
+
         //Table Databases
         Database votesDatabase;
         Database preferencesDatabase;
@@ -24,7 +21,7 @@ namespace Assignment3_Voting_System
             InitializeComponent();
             this.votesDatabase = new Database();
             this.preferencesDatabase = new Database();
-            this.preferencesDatabase.addColumns(new string[]{ "Candidates", "Votes" });
+            this.preferencesDatabase.addColumns(new string[] { "Candidates", "Votes" });
             this.firstPreferencesGridView.DataSource = this.preferencesDatabase.table;
         }
 
@@ -69,7 +66,8 @@ namespace Assignment3_Voting_System
                     //Set the data source
                     votesGridView.DataSource = this.votesDatabase.table;
                     votesGridView.AutoResizeColumns();
-                    this.votesDatabase.getCandidates(); 
+                    this.votesDatabase.getCandidates();
+                    validateTable();
                 }
             }
         }
@@ -80,7 +78,7 @@ namespace Assignment3_Voting_System
         }
 
         #endregion
- 
+
         #region Add Candidate
 
         private void addCandidate_Click(object sender, EventArgs e)
@@ -143,12 +141,15 @@ namespace Assignment3_Voting_System
 
         #endregion
 
+        #region Validate Table
+
         public void validateTable()
         {
             for (int i = 0; i < this.votesGridView.Rows.Count - 1; i++)
             {
                 string[] row = this.votesDatabase.getRow(i);
-                if(!votesDatabase.isValid(row)){
+                if (!votesDatabase.isValid(row))
+                {
                     this.votesGridView.Rows[i].HeaderCell.Style.BackColor = Color.Red;
                 }
                 else
@@ -156,13 +157,6 @@ namespace Assignment3_Voting_System
                     this.votesGridView.Rows[i].HeaderCell.Style.BackColor = SystemColors.Control;
                 }
             }
-        }
-
-        #region Quit Application
-
-        private void exitMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         #endregion
@@ -190,52 +184,67 @@ namespace Assignment3_Voting_System
 
         #endregion
 
+        #region Quit Application
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
         private void countButton_Click(object sender, EventArgs e)
         {
-            List<int> count = new List<int>();
-            
+            List<int> firstPrefcount = new List<int>();
+
             for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
             {
-                count.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
+                firstPrefcount.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
             }
 
-            
+            countVotes(firstPrefcount);
+
 
         }
-        /// <summary>
-        /// ///////////////////////////////////
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        private List<int> countVotes(List<int> count)
+
+
+        private List<int> countVotes(List<int> firstPrefCount)
         {
             int winner = -1;
-            bool tie = true;
-            int min = count.Min();
-            List<int> minCandidates = new List<int>();
-            
-            for (int i = 0; i < count.Count; i++)
+            bool tie = false;
+            int max = firstPrefCount.Max();
+            if (max > this.votesDatabase.getRowCount() / 2)
             {
-                if (count[i] > this.votesDatabase.getRowCount() / 2)
+                winner = firstPrefCount.IndexOf(max);
+            }
+            int min = firstPrefCount.Min();
+            List<int> minCandidates = new List<int>();
+
+            for (int i = 0; i < firstPrefCount.Count; i++)
+            {
+                if (firstPrefCount[i] > this.votesDatabase.getRowCount() / 2)
                 {
                     winner = i;
                 }
-                else if (i != 0 && count[i] != count[i - 1])
+                if (min == firstPrefCount[i])
                 {
-                    tie = false;
+                    tie = true;
                 }
-                else if (count[i] == min)
+                if (firstPrefCount[i] == min)
                 {
                     minCandidates.Add(i);
                 }
             }
+            int index = 0;
 
-            if (minCandidates.Count > 1)
+            if (minCandidates.Count > 0)
             {
-                int index = new Random(minCandidates.Count).Next();
-                distributeVotes(minCandidates[index]);
+                index = new Random().Next(minCandidates.Count);
             }
-            
+            Console.WriteLine("Candidate to be precluded: " + this.preferencesDatabase.getRow(minCandidates[index])[0]);
+            distributeVotes(minCandidates[index]);
+
+            return firstPrefCount;
         }
 
         private void distributeVotes(int candidate)
@@ -249,9 +258,10 @@ namespace Assignment3_Voting_System
                     {
                         if (row[j].Equals("2"))
                         {
-                            int votes= int.Parse(this.preferencesDatabase.getRow(j)[1]);
-                            votes+=1;
+                            int votes = int.Parse(this.preferencesDatabase.getRow(j)[1]);
+                            votes += 1;
                             this.preferencesDatabase.updateVotes(j, votes);
+                            Console.WriteLine("Vote at " + (i+1) + " transfered to: " + this.preferencesDatabase.getRow(j)[0]);
                         }
                     }
                 }

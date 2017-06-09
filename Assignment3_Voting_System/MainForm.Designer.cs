@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,8 +41,8 @@
             this.addCandidate = new System.Windows.Forms.Button();
             this.candidateTextBox = new System.Windows.Forms.TextBox();
             this.firstPreferencesGroupBox = new System.Windows.Forms.GroupBox();
-            this.firstPreferencesGridView = new System.Windows.Forms.DataGridView();
             this.countButton = new System.Windows.Forms.Button();
+            this.firstPreferencesGridView = new System.Windows.Forms.DataGridView();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.votesGridView)).BeginInit();
             this.votesTableBox.SuspendLayout();
@@ -100,8 +100,8 @@
             // 
             this.votesGridView.AllowUserToResizeColumns = false;
             this.votesGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.votesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.votesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.votesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -175,14 +175,24 @@
             this.firstPreferencesGroupBox.TabStop = false;
             this.firstPreferencesGroupBox.Text = "First Preferences";
             // 
+            // countButton
+            // 
+            this.countButton.Location = new System.Drawing.Point(174, 420);
+            this.countButton.Name = "countButton";
+            this.countButton.Size = new System.Drawing.Size(75, 23);
+            this.countButton.TabIndex = 1;
+            this.countButton.Text = "Count";
+            this.countButton.UseVisualStyleBackColor = true;
+            this.countButton.Click += new System.EventHandler(this.countButton_Click);
+            // 
             // firstPreferencesGridView
             // 
             this.firstPreferencesGridView.AllowUserToAddRows = false;
             this.firstPreferencesGridView.AllowUserToDeleteRows = false;
             this.firstPreferencesGridView.AllowUserToResizeColumns = false;
             this.firstPreferencesGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.firstPreferencesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.firstPreferencesGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.firstPreferencesGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -194,16 +204,6 @@
             this.firstPreferencesGridView.RowHeadersVisible = false;
             this.firstPreferencesGridView.Size = new System.Drawing.Size(242, 394);
             this.firstPreferencesGridView.TabIndex = 0;
-            // 
-            // countButton
-            // 
-            this.countButton.Location = new System.Drawing.Point(174, 420);
-            this.countButton.Name = "countButton";
-            this.countButton.Size = new System.Drawing.Size(75, 23);
-            this.countButton.TabIndex = 1;
-            this.countButton.Text = "Count";
-            this.countButton.UseVisualStyleBackColor = true;
-            this.countButton.Click += new System.EventHandler(this.countButton_Click);
             // 
             // MainForm
             // 
