@@ -244,6 +244,8 @@ namespace Assignment3_Voting_System
             Console.WriteLine("Candidate to be precluded: " + this.preferencesDatabase.getRow(minCandidates[index])[0]);
             distributeVotes(minCandidates[index]);
 
+            firstPrefCount[minCandidates[index]] = -1;
+
             return firstPrefCount;
         }
 

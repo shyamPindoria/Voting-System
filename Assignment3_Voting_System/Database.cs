@@ -39,13 +39,13 @@ namespace Assignment3_Voting_System
             try
             {
                 Object[] obj = this.table.Rows[index].ItemArray;
-                String[] row = new String[obj.Length];
+                string[] row = new string[obj.Length];
 
                 for (int i = 0; i < row.Length; i++)
                 {
                     if (!obj[i].ToString().Equals(""))
                     {
-                        row[i] = (String)obj[i];
+                        row[i] = (string)obj[i];
                     }
                     else
                     {
