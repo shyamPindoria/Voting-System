@@ -42,6 +42,7 @@
             this.candidateTextBox = new System.Windows.Forms.TextBox();
             this.firstPreferencesGroupBox = new System.Windows.Forms.GroupBox();
             this.firstPreferencesGridView = new System.Windows.Forms.DataGridView();
+            this.countButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.votesGridView)).BeginInit();
             this.votesTableBox.SuspendLayout();
@@ -165,6 +166,7 @@
             // 
             this.firstPreferencesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.firstPreferencesGroupBox.Controls.Add(this.countButton);
             this.firstPreferencesGroupBox.Controls.Add(this.firstPreferencesGridView);
             this.firstPreferencesGroupBox.Location = new System.Drawing.Point(590, 84);
             this.firstPreferencesGroupBox.Name = "firstPreferencesGroupBox";
@@ -190,8 +192,18 @@
             this.firstPreferencesGridView.Name = "firstPreferencesGridView";
             this.firstPreferencesGridView.ReadOnly = true;
             this.firstPreferencesGridView.RowHeadersVisible = false;
-            this.firstPreferencesGridView.Size = new System.Drawing.Size(242, 423);
+            this.firstPreferencesGridView.Size = new System.Drawing.Size(242, 394);
             this.firstPreferencesGridView.TabIndex = 0;
+            // 
+            // countButton
+            // 
+            this.countButton.Location = new System.Drawing.Point(174, 420);
+            this.countButton.Name = "countButton";
+            this.countButton.Size = new System.Drawing.Size(75, 23);
+            this.countButton.TabIndex = 1;
+            this.countButton.Text = "Count";
+            this.countButton.UseVisualStyleBackColor = true;
+            this.countButton.Click += new System.EventHandler(this.countButton_Click);
             // 
             // MainForm
             // 
@@ -232,6 +244,7 @@
         private System.Windows.Forms.TextBox candidateTextBox;
         private System.Windows.Forms.GroupBox firstPreferencesGroupBox;
         private System.Windows.Forms.DataGridView firstPreferencesGridView;
+        private System.Windows.Forms.Button countButton;
     }
 }
 

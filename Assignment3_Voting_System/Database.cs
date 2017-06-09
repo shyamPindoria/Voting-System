@@ -63,6 +63,11 @@ namespace Assignment3_Voting_System
             }
         }
 
+        public void updateVotes(int index, int value)
+        {
+            this.table.Rows[index][1] = value;
+        }
+
         public Boolean isValid(string[] row)
         {
             if (row.Length == getCandidates().Length)
@@ -105,35 +110,6 @@ namespace Assignment3_Voting_System
                 headers[i] = this.table.Columns[i].ToString();
             }
             return headers;
-        }
-
-        public void calculateFirstPreferences(Database votesDatabase)
-        {
-            this.table.Clear();
-            int[] firstCounts = new int[votesDatabase.getColumnCount()];
-            for (int i = 0; i < votesDatabase.getRowCount(); i++)
-            {
-                string[] currentRow = votesDatabase.getRow(i);
-
-                if (votesDatabase.isValid(currentRow))
-                {
-                    for (int j = 0; j < currentRow.Length; j++)
-                    {
-                        if (currentRow[j].Equals("1"))
-                        {
-                            firstCounts[j]++;
-                        }
-                    }
-                }
-
-
-                
-            }
-            string[] columns = votesDatabase.getCandidates();
-            for (int i = 0; i < firstCounts.Length; i++)
-            {
-                this.addRow(new string[] { columns[i], firstCounts[i].ToString() });
-            }
         }
 
     }

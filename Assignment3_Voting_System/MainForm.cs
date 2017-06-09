@@ -111,18 +111,41 @@ namespace Assignment3_Voting_System
 
         private void votesGridView_CurrentCellChanged(object sender, EventArgs e)
         {
-
+            calculateFirstPreferences();
             validateTable();
-            this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
+        }
 
+        private void calculateFirstPreferences()
+        {
+            preferencesDatabase.table.Clear();
+            int[] firstCounts = new int[votesDatabase.getColumnCount()];
+            for (int i = 0; i < votesDatabase.getRowCount(); i++)
+            {
+                string[] currentRow = votesDatabase.getRow(i);
 
+                if (votesDatabase.isValid(currentRow))
+                {
+                    for (int j = 0; j < currentRow.Length; j++)
+                    {
+                        if (currentRow[j].Equals("1"))
+                        {
+                            firstCounts[j]++;
+                        }
+                    }
+                }
+            }
+            string[] columns = votesDatabase.getCandidates();
+            for (int i = 0; i < firstCounts.Length; i++)
+            {
+                preferencesDatabase.addRow(new string[] { columns[i], firstCounts[i].ToString() });
+            }
         }
 
         #endregion
 
         public void validateTable()
         {
-            for (int i = 0; i < this.votesGridView.Rows.Count; i++)
+            for (int i = 0; i < this.votesGridView.Rows.Count - 1; i++)
             {
                 string[] row = this.votesDatabase.getRow(i);
                 if(!votesDatabase.isValid(row)){
@@ -132,8 +155,6 @@ namespace Assignment3_Voting_System
                 {
                     this.votesGridView.Rows[i].HeaderCell.Style.BackColor = SystemColors.Control;
                 }
-
-
             }
         }
 
@@ -150,7 +171,7 @@ namespace Assignment3_Voting_System
 
         private void updateRowHeaders()
         {
-            for (int i = 0; i < this.votesGridView.Rows.Count; i++)
+            for (int i = 0; i < this.votesGridView.Rows.Count - 1; i++)
             {
                 this.votesGridView.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
@@ -169,5 +190,72 @@ namespace Assignment3_Voting_System
 
         #endregion
 
+        private void countButton_Click(object sender, EventArgs e)
+        {
+            List<int> count = new List<int>();
+            
+            for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
+            {
+                count.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
+            }
+
+            
+
+        }
+        /// <summary>
+        /// ///////////////////////////////////
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        private List<int> countVotes(List<int> count)
+        {
+            int winner = -1;
+            bool tie = true;
+            int min = count.Min();
+            List<int> minCandidates = new List<int>();
+            
+            for (int i = 0; i < count.Count; i++)
+            {
+                if (count[i] > this.votesDatabase.getRowCount() / 2)
+                {
+                    winner = i;
+                }
+                else if (i != 0 && count[i] != count[i - 1])
+                {
+                    tie = false;
+                }
+                else if (count[i] == min)
+                {
+                    minCandidates.Add(i);
+                }
+            }
+
+            if (minCandidates.Count > 1)
+            {
+                int index = new Random(minCandidates.Count).Next();
+                distributeVotes(minCandidates[index]);
+            }
+            
+        }
+
+        private void distributeVotes(int candidate)
+        {
+            for (int i = 0; i < this.votesDatabase.getRowCount(); i++)
+            {
+                string[] row = this.votesDatabase.getRow(i);
+                if (row[candidate].Equals("1"))
+                {
+                    for (int j = 0; j < row.Length; j++)
+                    {
+                        if (row[j].Equals("2"))
+                        {
+                            int votes= int.Parse(this.preferencesDatabase.getRow(j)[1]);
+                            votes+=1;
+                            this.preferencesDatabase.updateVotes(j, votes);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
