@@ -195,14 +195,30 @@ namespace Assignment3_Voting_System
 
         private void countButton_Click(object sender, EventArgs e)
         {
-            List<int> firstPrefcount = new List<int>();
-
+            List<int> firstPrefCount = new List<int>();
             for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
             {
-                firstPrefcount.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
+                firstPrefCount.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
             }
+            //For testing purposes just runs 3 times
+            //However it should run until a winner is not found
+            for (int j = 0; j < 5; j++)
+            {
+                firstPrefCount = countVotes(firstPrefCount);
 
-            countVotes(firstPrefcount);
+                for (int i = 0; i < firstPrefCount.Count; i++)
+                {
+                    if (firstPrefCount[i] != -1)
+                    {
+                        firstPrefCount[i] = int.Parse(this.preferencesDatabase.getRow(i)[1]);
+                    }
+                }
+
+                for (int i = 0; i < firstPrefCount.Count; i++)
+                {
+                    Console.Write(firstPrefCount[i] + ", ");
+                }
+            }
 
 
         }
@@ -211,30 +227,49 @@ namespace Assignment3_Voting_System
         private List<int> countVotes(List<int> firstPrefCount)
         {
             int winner = -1;
-            bool tie = false;
+            bool tie = true;
             int max = firstPrefCount.Max();
             if (max > this.votesDatabase.getRowCount() / 2)
             {
                 winner = firstPrefCount.IndexOf(max);
+                Console.WriteLine("WINNER FOUND: " + this.preferencesDatabase.getRow(winner)[0]);
             }
-            int min = firstPrefCount.Min();
+            int min = int.MaxValue;
+            foreach (int value in firstPrefCount)
+            {
+                if (value != -1 && value < min)
+                {
+                    min = value;
+                }
+            }
             List<int> minCandidates = new List<int>();
 
             for (int i = 0; i < firstPrefCount.Count; i++)
             {
-                if (firstPrefCount[i] > this.votesDatabase.getRowCount() / 2)
+                if (firstPrefCount[i] != -1)
                 {
-                    winner = i;
-                }
-                if (min == firstPrefCount[i])
-                {
-                    tie = true;
-                }
-                if (firstPrefCount[i] == min)
-                {
-                    minCandidates.Add(i);
+                    //Use count of non-max values in firstPrefCount instead of getRowCount()
+                    if (firstPrefCount[i] > this.votesDatabase.getRowCount() / 2)
+                    {
+                        winner = i;
+                    }
+                    else if (min == firstPrefCount[i])
+                    {
+                        minCandidates.Add(i);
+                    }
+                    if (i > 0 && firstPrefCount[i-1] == firstPrefCount[i])
+                    {
+                        tie = false;
+                    }
                 }
             }
+
+            // Do something
+            if (tie)
+            {
+                Console.WriteLine("TIE!!");
+            }
+
             int index = 0;
 
             if (minCandidates.Count > 0)
@@ -251,6 +286,18 @@ namespace Assignment3_Voting_System
 
         private void distributeVotes(int candidate)
         {
+            //Still need to calculate for 2nd, 3rd, 4th etc.
+            //Example:  a   b   c   d
+            //          1   2   3   4
+            //          4   1   3   2
+            //          4   3   2   1
+            //          4   2   1   3
+
+            // first run - b gets removed randomly and it vote gets distributed to d
+            // d now has 2 votes
+            // Second run - a gets removed randomly - it had one vote which was to be transfered to b
+            // but since b is deleted, its 3rd preference should be checked which is c so c now has 2 votes
+            // both c and d have 2 - 2 votes (tie)
             for (int i = 0; i < this.votesDatabase.getRowCount(); i++)
             {
                 string[] row = this.votesDatabase.getRow(i);
@@ -263,7 +310,7 @@ namespace Assignment3_Voting_System
                             int votes = int.Parse(this.preferencesDatabase.getRow(j)[1]);
                             votes += 1;
                             this.preferencesDatabase.updateVotes(j, votes);
-                            Console.WriteLine("Vote at " + (i+1) + " transfered to: " + this.preferencesDatabase.getRow(j)[0]);
+                            Console.WriteLine("Vote at " + (i + 1) + " transfered to: " + this.preferencesDatabase.getRow(j)[0]);
                         }
                     }
                 }
