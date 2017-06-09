@@ -13,6 +13,7 @@ namespace Assignment3_Voting_System
         //Table Databases
         Database votesDatabase;
         Database preferencesDatabase;
+        Database resultsDatabase;
 
         #region Constructor
 
@@ -21,6 +22,7 @@ namespace Assignment3_Voting_System
             InitializeComponent();
             this.votesDatabase = new Database();
             this.preferencesDatabase = new Database();
+            this.resultsDatabase = new Database();
             this.preferencesDatabase.addColumns(new string[] { "Candidates", "Votes" });
             this.firstPreferencesGridView.DataSource = this.preferencesDatabase.table;
         }
@@ -45,7 +47,6 @@ namespace Assignment3_Voting_System
                     StreamReader reader = new StreamReader(stream); //Readed to read lines from the file
 
                     string[] headers = reader.ReadLine().Split(','); //The first line which contains the headers of the columns
-                    this.votesDatabase = new Database();
                     string[] columns = new string[headers.Length];
 
                     for (int i = 0; i < headers.Length; i++)
@@ -195,94 +196,131 @@ namespace Assignment3_Voting_System
 
         private void countButton_Click(object sender, EventArgs e)
         {
-            List<int> firstPrefCount = new List<int>();
+           
+
+            List<Candidate> candidates = new List<Candidate>();
+            String[] resultsColumns = new string[this.preferencesDatabase.getRowCount()];   // to get columns of result 
+            String[] resultsRow = new string[this.preferencesDatabase.getRowCount()];
             for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
             {
-                firstPrefCount.Add(int.Parse(this.preferencesDatabase.getRow(i)[1]));
+                String name = this.preferencesDatabase.getRow(i)[0];
+                int votes = int.Parse(this.preferencesDatabase.getRow(i)[1]);
+                candidates.Add(new Candidate(name, votes));
+
+                // create header for the result database
+                resultsColumns[i] = name;
+                // create first raw by copying all items
+                resultsRow[i] = votes.ToString();
             }
-            //For testing purposes just runs 3 times
-            //However it should run until a winner is not found
-            for (int j = 0; j < 5; j++)
+
+            this.resultsDatabase.addColumns(resultsColumns);
+            this.resultsDatabase.addRow(resultsRow);
+
+            ResultForm resultsForm = new ResultForm(this.resultsDatabase);
+            resultsForm.ShowDialog();
+
+
+
+            // calculation starts from here
+            Boolean isTied = false;
+            Candidate winner = null;
+            do
             {
-                firstPrefCount = countVotes(firstPrefCount);
+               winner=  countVotes(candidates, isTied);
 
-                for (int i = 0; i < firstPrefCount.Count; i++)
-                {
-                    if (firstPrefCount[i] != -1)
-                    {
-                        firstPrefCount[i] = int.Parse(this.preferencesDatabase.getRow(i)[1]);
-                    }
-                }
-
-                for (int i = 0; i < firstPrefCount.Count; i++)
-                {
-                    Console.Write(firstPrefCount[i] + ", ");
-                }
-            }
-
+            } while (winner == null && isTied == false);
 
         }
 
 
-        private List<int> countVotes(List<int> firstPrefCount)
+
+
+        private Candidate countVotes(List<Candidate> candidates, bool isTied)
         {
-            int winner = -1;
-            bool tie = true;
-            int max = firstPrefCount.Max();
-            if (max > this.votesDatabase.getRowCount() / 2)
-            {
-                winner = firstPrefCount.IndexOf(max);
-                Console.WriteLine("WINNER FOUND: " + this.preferencesDatabase.getRow(winner)[0]);
-            }
-            int min = int.MaxValue;
-            foreach (int value in firstPrefCount)
-            {
-                if (value != -1 && value < min)
-                {
-                    min = value;
-                }
-            }
-            List<int> minCandidates = new List<int>();
+            String[] resultsRow = new string[this.preferencesDatabase.getRowCount()];
 
-            for (int i = 0; i < firstPrefCount.Count; i++)
+            Candidate winner =null;
+            isTied = false;
+
+
+            Candidate candidatWithMaxVotes = candidates.Max();
+            
+            if (candidatWithMaxVotes.votes > this.votesDatabase.getRowCount() / 2)
             {
-                if (firstPrefCount[i] != -1)
+                winner = candidatWithMaxVotes;
+                int indexOfWinner = candidates.IndexOf(winner);
+                resultsRow[indexOfWinner] = winner.votes.ToString();    // add the result at the position of winner
+               
+                // set everone else as precued 
+                for(int i = 0; i < resultsRow.Length; i++)
                 {
-                    //Use count of non-max values in firstPrefCount instead of getRowCount()
-                    if (firstPrefCount[i] > this.votesDatabase.getRowCount() / 2)
+                    if (i != indexOfWinner)
                     {
-                        winner = i;
-                    }
-                    else if (min == firstPrefCount[i])
-                    {
-                        minCandidates.Add(i);
-                    }
-                    if (i > 0 && firstPrefCount[i-1] == firstPrefCount[i])
-                    {
-                        tie = false;
+                        resultsRow[i] = "P";
                     }
                 }
+
+                Console.WriteLine("WINNER FOUND: " + candidatWithMaxVotes.name);
             }
 
-            // Do something
-            if (tie)
+
+
+            int votes = candidates[0].votes;    // get the votes of one of the candidates
+            int votesCount = 0; // counts the candidates that have same number of votes
+            foreach (Candidate candidate in candidates)
             {
-                Console.WriteLine("TIE!!");
+                if (candidate.votes == votes)
+                {
+                    votesCount++;
+                }
             }
-
-            int index = 0;
-
-            if (minCandidates.Count > 0)
+            if (votesCount == candidates.Count)
             {
-                index = new Random().Next(minCandidates.Count);
+
+                isTied = true;
             }
-            Console.WriteLine("Candidate to be precluded: " + this.preferencesDatabase.getRow(minCandidates[index])[0]);
-            distributeVotes(minCandidates[index]);
 
-            firstPrefCount[minCandidates[index]] = -1;
 
-            return firstPrefCount;
+                
+            Candidate candidateToPreclude = candidates.Min();   // min needs to be precluded
+            int count = 0;  // counts total number of candidates with lowest votes 
+            List<Candidate> allCandidatesWithLowest = new List<Candidate>();
+
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                if (candidates[i].votes == candidateToPreclude.votes)
+                {
+                    allCandidatesWithLowest.Add(candidates[i]);
+                    count++;
+                }
+            }
+            
+            if (count > 1)
+            {
+                // update the candidat to preclude when there is more than one people with lowest votes
+                Random rand = new Random();
+                int index = rand.Next(0,allCandidatesWithLowest.Count - 1);
+                candidateToPreclude = allCandidatesWithLowest[index];
+            }
+
+
+            // remove the candidate and distribute the votes
+            distributeVotes(candidateToPreclude.votes);
+            // need to remove the row 
+            //this.preferencesDatabase.removeRow(new string[] { candidateToPreclude.name, candidateToPreclude.votes.ToString() });
+
+            this.resultsDatabase.addRow(resultsRow);
+
+            
+            return winner;
+
+
         }
+
+
+
+
+
 
         private void distributeVotes(int candidate)
         {
