@@ -32,12 +32,8 @@ namespace Assignment3_Voting_System
 
         public void addRow(string[] row)
         {
-            this.table.Rows.Add();
+            this.table.Rows.Add(row);
         }
-
-
-
-
 
         public string[] getRow(int index)
         {
@@ -87,7 +83,7 @@ namespace Assignment3_Voting_System
                 }
                 return true;
             }
-    return false;
+            return false;
         }
 
 
@@ -100,9 +96,6 @@ namespace Assignment3_Voting_System
         {
             return this.table.Rows.Count;
         }
-
-        
-
 
         public string[] getCandidates()
         {
