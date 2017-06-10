@@ -196,28 +196,16 @@ namespace Assignment3_Voting_System
 
         private void countButton_Click(object sender, EventArgs e)
         {
-           
 
-            List<Candidate> candidates = new List<Candidate>();
+
             String[] resultsColumns = new string[this.preferencesDatabase.getRowCount()];   // to get columns of result 
             String[] resultsRow = new string[this.preferencesDatabase.getRowCount()];
-            for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
-            {
-                String name = this.preferencesDatabase.getRow(i)[0];
-                int votes = int.Parse(this.preferencesDatabase.getRow(i)[1]);
-                candidates.Add(new Candidate(name, votes));
 
-                // create header for the result database
-                resultsColumns[i] = name;
-                // create first raw by copying all items
-                resultsRow[i] = votes.ToString();
-            }
 
             this.resultsDatabase.addColumns(resultsColumns);
-            this.resultsDatabase.addRow(resultsRow);
 
-            ResultForm resultsForm = new ResultForm(this.resultsDatabase);
-            resultsForm.ShowDialog();
+
+
 
 
 
@@ -226,9 +214,36 @@ namespace Assignment3_Voting_System
             Candidate winner = null;
             do
             {
-               winner=  countVotes(candidates, isTied);
+
+                List<Candidate> candidates = new List<Candidate>();
+                for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
+                {
+                    String name = this.preferencesDatabase.getRow(i)[0];
+                    int votes = int.Parse(this.preferencesDatabase.getRow(i)[1]);
+                    candidates.Add(new Candidate(name, votes));
+
+                    // create header for the result database
+                    resultsColumns[i] = name;
+                    // create first raw by copying all items
+                    resultsRow[i] = votes.ToString();
+               
+                }
+                this.resultsDatabase.addRow(resultsRow);
+
+                if (candidates.Count!=0){
+                    winner = countVotes(candidates, isTied);
+                }
+                else
+                {
+                    break;
+                }
+
 
             } while (winner == null && isTied == false);
+
+
+            ResultForm resultsForm = new ResultForm(this.resultsDatabase);
+            resultsForm.ShowDialog();
 
         }
 
@@ -237,22 +252,24 @@ namespace Assignment3_Voting_System
 
         private Candidate countVotes(List<Candidate> candidates, bool isTied)
         {
-            String[] resultsRow = new string[this.preferencesDatabase.getRowCount()];
+            String[] resultsRow = resultsDatabase.getRow(0);
 
-            Candidate winner =null;
+            Candidate winner = null;
             isTied = false;
 
 
             Candidate candidatWithMaxVotes = candidates.Max();
-            
+
+
+            ///////////////Winner
             if (candidatWithMaxVotes.votes > this.votesDatabase.getRowCount() / 2)
             {
                 winner = candidatWithMaxVotes;
                 int indexOfWinner = candidates.IndexOf(winner);
-                resultsRow[indexOfWinner] = winner.votes.ToString();    // add the result at the position of winner
-               
+
+
                 // set everone else as precued 
-                for(int i = 0; i < resultsRow.Length; i++)
+                for (int i = 0; i < resultsRow.Length; i++)
                 {
                     if (i != indexOfWinner)
                     {
@@ -265,6 +282,7 @@ namespace Assignment3_Voting_System
 
 
 
+            ///////////////////////////Tie
             int votes = candidates[0].votes;    // get the votes of one of the candidates
             int votesCount = 0; // counts the candidates that have same number of votes
             foreach (Candidate candidate in candidates)
@@ -276,12 +294,12 @@ namespace Assignment3_Voting_System
             }
             if (votesCount == candidates.Count)
             {
-
                 isTied = true;
             }
 
 
-                
+
+            //////////////////////////Min- Preclude   
             Candidate candidateToPreclude = candidates.Min();   // min needs to be precluded
             int count = 0;  // counts total number of candidates with lowest votes 
             List<Candidate> allCandidatesWithLowest = new List<Candidate>();
@@ -294,24 +312,30 @@ namespace Assignment3_Voting_System
                     count++;
                 }
             }
-            
+
             if (count > 1)
             {
                 // update the candidat to preclude when there is more than one people with lowest votes
                 Random rand = new Random();
-                int index = rand.Next(0,allCandidatesWithLowest.Count - 1);
+                int index = rand.Next(0, allCandidatesWithLowest.Count - 1);
                 candidateToPreclude = allCandidatesWithLowest[index];
             }
 
+            int indexToRemove = this.preferencesDatabase.indexOf(candidateToPreclude.name);
 
             // remove the candidate and distribute the votes
-            distributeVotes(candidateToPreclude.votes);
-            // need to remove the row 
-            //this.preferencesDatabase.removeRow(new string[] { candidateToPreclude.name, candidateToPreclude.votes.ToString() });
+            if (indexToRemove != -1)
+            {
+                distributeVotes(indexToRemove);
+                this.preferencesDatabase.removeRow(indexToRemove);
 
-            this.resultsDatabase.addRow(resultsRow);
+                // need to remove the row 
+                //this.preferencesDatabase.removeRow(new string[] { candidateToPreclude.name, candidateToPreclude.votes.ToString() });
+                
 
-            
+            }
+
+
             return winner;
 
 
@@ -336,19 +360,35 @@ namespace Assignment3_Voting_System
             // Second run - a gets removed randomly - it had one vote which was to be transfered to b
             // but since b is deleted, its 3rd preference should be checked which is c so c now has 2 votes
             // both c and d have 2 - 2 votes (tie)
+
+            int pref;
             for (int i = 0; i < this.votesDatabase.getRowCount(); i++)
             {
+                pref = 1;
                 string[] row = this.votesDatabase.getRow(i);
-                if (row[candidate].Equals("1"))
+                if (row[candidate].Equals(pref.ToString()))
                 {
+                    
                     for (int j = 0; j < row.Length; j++)
                     {
-                        if (row[j].Equals("2"))
+                       
+                        if (row[j].Equals((pref + 1).ToString()))
                         {
-                            int votes = int.Parse(this.preferencesDatabase.getRow(j)[1]);
-                            votes += 1;
-                            this.preferencesDatabase.updateVotes(j, votes);
-                            Console.WriteLine("Vote at " + (i + 1) + " transfered to: " + this.preferencesDatabase.getRow(j)[0]);
+                            String candidateName = this.votesDatabase.getColumn(j);
+                            int indexOfCandidate = this.preferencesDatabase.indexOf(candidateName);
+                            if (indexOfCandidate != -1)
+                            {
+                                int votes = int.Parse(this.preferencesDatabase.getRow(indexOfCandidate)[1]);
+                                votes += 1;
+                                this.preferencesDatabase.updateVotes(indexOfCandidate, votes);
+                                Console.WriteLine("Vote at " + (i + 1) + " transfered to: " + this.preferencesDatabase.getRow(indexOfCandidate)[0]);
+                            }
+                            else
+                            {
+                                pref += 1;
+                            }
+
+                            
                         }
                     }
                 }

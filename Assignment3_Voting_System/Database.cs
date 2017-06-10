@@ -34,6 +34,26 @@ namespace Assignment3_Voting_System
         {
             this.table.Rows.Add(row);
         }
+        public int indexOf(String name)
+        {
+            for(int i = 0; i < this.table.Rows.Count; i++)
+            {
+                string tempName = this.table.Rows[i].ItemArray[0].ToString();
+                if (tempName.Equals((String)name))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public void removeRow(int index)
+        {
+            if (index != -1) {
+                this.table.Rows.RemoveAt(index);
+            }
+            
+        }
 
         public string[] getRow(int index)
         {
@@ -65,8 +85,13 @@ namespace Assignment3_Voting_System
         }
 
         public void updateVotes(int index, int value)
+
         {
-            this.table.Rows[index][1] = value;
+            if(index!=-1 )
+            {
+                this.table.Rows[index][1] = value;
+            }
+            
         }
 
         public Boolean isValid(string[] row)
@@ -95,6 +120,10 @@ namespace Assignment3_Voting_System
         public int getRowCount()
         {
             return this.table.Rows.Count;
+        }
+        public string getColumn(int index)
+        {
+            return this.table.Columns[index].ToString();
         }
 
         public string[] getCandidates()
