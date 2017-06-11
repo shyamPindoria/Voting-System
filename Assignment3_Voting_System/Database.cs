@@ -90,8 +90,17 @@ namespace Assignment3_Voting_System
             if(index!=-1 )
             {
                 this.table.Rows[index][1] = value;
+            } 
+        }
+
+        public void updateCandidates(int index, String candidateName)
+
+        {
+            if (index != -1)
+            {
+                this.table.Rows[index][0] = candidateName;
             }
-            
+
         }
 
         public Boolean isValid(string[] row)
