@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Candidate.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="ResultForm.cs">
       <SubType>Form</SubType>

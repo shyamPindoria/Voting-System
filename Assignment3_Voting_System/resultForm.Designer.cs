@@ -32,7 +32,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.resultGridView = new System.Windows.Forms.DataGridView();
             this.ResultsOverviewGroupBox = new System.Windows.Forms.GroupBox();
-            this.resultsGroupBos = new System.Windows.Forms.GroupBox();
+            this.winnerGroupBox = new System.Windows.Forms.GroupBox();
             this.visualPresentationGroupBox = new System.Windows.Forms.GroupBox();
             this.graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.exportButton = new System.Windows.Forms.Button();
@@ -75,17 +75,17 @@
             this.ResultsOverviewGroupBox.TabStop = false;
             this.ResultsOverviewGroupBox.Text = "Results Overview";
             // 
-            // resultsGroupBos
+            // winnerGroupBox
             // 
-            this.resultsGroupBos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.resultsGroupBos.Location = new System.Drawing.Point(9, 434);
-            this.resultsGroupBos.Margin = new System.Windows.Forms.Padding(2);
-            this.resultsGroupBos.Name = "resultsGroupBos";
-            this.resultsGroupBos.Padding = new System.Windows.Forms.Padding(2);
-            this.resultsGroupBos.Size = new System.Drawing.Size(538, 102);
-            this.resultsGroupBos.TabIndex = 2;
-            this.resultsGroupBos.TabStop = false;
-            this.resultsGroupBos.Text = "Results";
+            this.winnerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.winnerGroupBox.Location = new System.Drawing.Point(9, 434);
+            this.winnerGroupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.winnerGroupBox.Name = "winnerGroupBox";
+            this.winnerGroupBox.Padding = new System.Windows.Forms.Padding(2);
+            this.winnerGroupBox.Size = new System.Drawing.Size(538, 102);
+            this.winnerGroupBox.TabIndex = 2;
+            this.winnerGroupBox.TabStop = false;
+            this.winnerGroupBox.Text = "Winner";
             // 
             // visualPresentationGroupBox
             // 
@@ -137,7 +137,7 @@
             this.ClientSize = new System.Drawing.Size(851, 545);
             this.Controls.Add(this.exportButton);
             this.Controls.Add(this.visualPresentationGroupBox);
-            this.Controls.Add(this.resultsGroupBos);
+            this.Controls.Add(this.winnerGroupBox);
             this.Controls.Add(this.ResultsOverviewGroupBox);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ResultForm";
@@ -155,7 +155,7 @@
 
         private System.Windows.Forms.DataGridView resultGridView;
         private System.Windows.Forms.GroupBox ResultsOverviewGroupBox;
-        private System.Windows.Forms.GroupBox resultsGroupBos;
+        private System.Windows.Forms.GroupBox winnerGroupBox;
         private System.Windows.Forms.GroupBox visualPresentationGroupBox;
         private System.Windows.Forms.DataVisualization.Charting.Chart graph;
         private System.Windows.Forms.Button exportButton;

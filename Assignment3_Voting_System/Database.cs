@@ -16,6 +16,10 @@ namespace Assignment3_Voting_System
             this.table = new DataTable();
         }
 
+        /// <summary>
+        /// Copy costructor
+        /// </summary>
+        /// <param name="d">Database to copy from</param>
         public Database(Database d)
         {
             this.table = new DataTable();
@@ -26,11 +30,19 @@ namespace Assignment3_Voting_System
             }
         }
 
+        /// <summary>
+        /// Add a single column
+        /// </summary>
+        /// <param name="column">Column to add</param>
         public void addColumn(string column)
         {
             this.table.Columns.Add(column);
         }
 
+        /// <summary>
+        /// Add a list of columns to the table
+        /// </summary>
+        /// <param name="columns">Columns to add</param>
         public void addColumns(string[] columns)
         {
             foreach (string column in columns)
@@ -39,93 +51,85 @@ namespace Assignment3_Voting_System
             }
         }
 
-
+        /// <summary>
+        /// Add a row the table
+        /// </summary>
+        /// <param name="row"></param>
         public void addRow(string[] row)
         {
             this.table.Rows.Add(row);
         }
-        public int indexOf(String name)
-        {
-            for(int i = 0; i < this.table.Rows.Count; i++)
-            {
-                string tempName = this.table.Rows[i].ItemArray[0].ToString();
-                if (tempName.Equals((String)name))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
 
+        /// <summary>
+        /// Delete a row from the table
+        /// </summary>
+        /// <param name="index"></param>
         public void removeRow(int index)
         {
-            if (index != -1) {
+            if (index >= 0) {
                 this.table.Rows.RemoveAt(index);
             }
             
         }
 
+        /// <summary>
+        /// Return row at a given index in a string []
+        /// </summary>
+        /// <param name="index">Index of the row</param>
+        /// <returns>String array</returns>
         public string[] getRow(int index)
         {
             try
             {
+                //Row is stored as an object initially
                 Object[] obj = this.table.Rows[index].ItemArray;
-                string[] row = new string[obj.Length];
 
+                string[] row = new string[obj.Length];
+                //Loop through the row
                 for (int i = 0; i < row.Length; i++)
                 {
-                    if (!obj[i].ToString().Equals(""))
-                    {
-                        row[i] = (string)obj[i];
-                    }
-                    else
-                    {
-                        row[i] = "";
-                    }
+                    //Cast the object to strings
+                    row[i] = obj[i].ToString();
                 }
 
                 return row;
             }
-            catch (Exception e)
+            catch (InvalidCastException e)
             {
                 Console.WriteLine(e.StackTrace);
+                //Return a blank array incase something goes wrong
                 return new string[0];
 
             }
         }
 
+        /// <summary>
+        /// Updates the preferences of a given vote
+        /// Preference 2 becomes 1, 3 becomes 2 etc.
+        /// Preference 1 becomes infinity
+        /// </summary>
+        /// <param name="rowIndex">Row to update</param>
         public void updatePreferences(int rowIndex)
         {
+            //Loop through the preferences in the row
             for (int i = 0; i < this.table.Rows[rowIndex].ItemArray.Length; i++)
             {
                 int pref = int.Parse(this.table.Rows[rowIndex][i].ToString());
+                //Decrement the preference
                 this.table.Rows[rowIndex][i] = pref - 1;
                 if (int.Parse(this.table.Rows[rowIndex][i].ToString()) == 0)
                 {
+                    //If the preference was 1, set it to infinity
                     this.table.Rows[rowIndex][i] = int.MaxValue;
                 }
             }
         }
 
-        public void updateVotes(int index, int value)
-
-        {
-            if(index!=-1 )
-            {
-                this.table.Rows[index][1] = value;
-            } 
-        }
-
-        public void updateCandidates(int index, String candidateName)
-
-        {
-            if (index != -1)
-            {
-                this.table.Rows[index][0] = candidateName;
-            }
-
-        }
-
+        /// <summary>
+        /// Check if the votes in a row are valid
+        /// </summary>
+        /// <param name="row">Row to check</param>
+        /// <returns>true if valid</returns>
         public Boolean isValid(string[] row)
         {
             if (row.Length == getCandidates().Length)
@@ -143,21 +147,38 @@ namespace Assignment3_Voting_System
             return false;
         }
 
-
+        /// <summary>
+        /// Returns the number of columns in the table
+        /// </summary>
+        /// <returns></returns>
         public int getColumnCount()
         {
             return this.table.Columns.Count;
         }
 
+        /// <summary>
+        /// Returns the number of rows in the table
+        /// </summary>
+        /// <returns></returns>
         public int getRowCount()
         {
             return this.table.Rows.Count;
         }
+
+        /// <summary>
+        /// Returns the column at a specific index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public string getColumn(int index)
         {
             return this.table.Columns[index].ToString();
         }
 
+        /// <summary>
+        /// Returns the column headers in a string[]
+        /// </summary>
+        /// <returns>String array</returns>
         public string[] getCandidates()
         {
             string[] headers = new string[this.getColumnCount()];
@@ -168,6 +189,10 @@ namespace Assignment3_Voting_System
             return headers;
         }
 
+        /// <summary>
+        /// Calculate the total number of first preferences
+        /// </summary>
+        /// <returns>Count of total votes</returns>
         public int getTotalVotes()
         {
             int count = 0;
@@ -179,29 +204,40 @@ namespace Assignment3_Voting_System
 
             return count;
         }
-
+        
+        /// <summary>
+        /// Calculate the first preferences
+        /// </summary>
+        /// <param name="votesDatabase">Database containing the votes</param>
         public void calculateFirstPreferences(Database votesDatabase)
         {
+            //Clear any present values
             this.table.Rows.Clear();
+            //First preferences count
             int[] firstCounts = new int[votesDatabase.getColumnCount()];
             for (int i = 0; i < votesDatabase.getRowCount(); i++)
             {
+                //Current row in the loop
                 string[] currentRow = votesDatabase.getRow(i);
 
                 //if (votesDatabase.isValid(currentRow))
                 //{
+                    //Look for first preferences in the votes table
                     for (int j = 0; j < currentRow.Length; j++)
                     {
                         if (currentRow[j].Equals("1"))
                         {
+                            //Increment the first preferences count
                             firstCounts[j]++;
                         }
                     }
                 //}
             }
+            //Name of candidates
             string[] columns = votesDatabase.getCandidates();
             for (int i = 0; i < firstCounts.Length; i++)
             {
+                //Populate the preferences table
                 this.addRow(new string[] { columns[i], firstCounts[i].ToString() });
             }
         }
