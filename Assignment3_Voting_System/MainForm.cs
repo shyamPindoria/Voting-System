@@ -332,7 +332,7 @@ namespace Assignment3_Voting_System
                 if (row[candidate].Equals("1"))
                 {
                     //Update the votes in that row
-                    this.tempVotes.updatePreferences(i);
+                    this.tempVotes.updatePreferences(i, precluded);
                 }
             }
 

@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.resultGridView = new System.Windows.Forms.DataGridView();
             this.ResultsOverviewGroupBox = new System.Windows.Forms.GroupBox();
             this.winnerGroupBox = new System.Windows.Forms.GroupBox();
@@ -48,6 +49,8 @@
             // 
             this.resultGridView.AllowUserToAddRows = false;
             this.resultGridView.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.resultGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.resultGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -80,7 +83,8 @@
             // 
             // winnerGroupBox
             // 
-            this.winnerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.winnerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.winnerGroupBox.Controls.Add(this.winnerLabel);
             this.winnerGroupBox.Location = new System.Drawing.Point(9, 434);
             this.winnerGroupBox.Margin = new System.Windows.Forms.Padding(2);
@@ -110,16 +114,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.graph.BackColor = System.Drawing.SystemColors.ButtonFace;
-            chartArea5.Name = "ChartArea1";
-            this.graph.ChartAreas.Add(chartArea5);
+            chartArea1.Name = "ChartArea1";
+            this.graph.ChartAreas.Add(chartArea1);
             this.graph.Location = new System.Drawing.Point(4, 17);
             this.graph.Margin = new System.Windows.Forms.Padding(2);
             this.graph.Name = "graph";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.graph.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.graph.Series.Add(series1);
             this.graph.Size = new System.Drawing.Size(283, 461);
             this.graph.TabIndex = 0;
             this.graph.Text = "Result Graph";

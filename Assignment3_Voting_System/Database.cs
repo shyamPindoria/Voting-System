@@ -116,7 +116,7 @@ namespace Assignment3_Voting_System
         /// Preference 1 becomes infinity
         /// </summary>
         /// <param name="rowIndex">Row to update</param>
-        public void updatePreferences(int rowIndex)
+        public void updatePreferences(int rowIndex, List<int> precluded)
         {
             //Loop through the preferences in the row
             for (int i = 0; i < this.table.Rows[rowIndex].ItemArray.Length; i++)
@@ -128,6 +128,10 @@ namespace Assignment3_Voting_System
                 {
                     //If the preference was 1, set it to infinity
                     this.table.Rows[rowIndex][i] = int.MaxValue;
+                }
+                if (this.table.Rows[rowIndex][i].ToString().Equals("1") && precluded.Contains(i))
+                {
+                    updatePreferences(rowIndex, precluded);
                 }
             }
         }
