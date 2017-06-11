@@ -14,6 +14,8 @@ namespace Assignment3_Voting_System
         Database votesDatabase;
         Database preferencesDatabase;
         Database resultsDatabase;
+        Database tempPreferences;
+        Database tempVotes;
 
         #region Constructor
 
@@ -23,13 +25,16 @@ namespace Assignment3_Voting_System
             this.votesDatabase = new Database();
             this.preferencesDatabase = new Database();
             this.resultsDatabase = new Database();
+            this.tempPreferences = new Database();
+            this.tempVotes = new Database();
             this.preferencesDatabase.addColumns(new string[] { "Candidates", "Votes" });
+            this.tempPreferences.addColumns(new string[] { "Candidates", "Votes" });
             this.firstPreferencesGridView.DataSource = this.preferencesDatabase.table;
         }
 
         #endregion
 
-        #region Importing and Exporting Files
+        #region Importing Files
 
         private void importMenuItem_Click(object sender, EventArgs e)
         {
@@ -43,39 +48,41 @@ namespace Assignment3_Voting_System
                 //Check if the file exists
                 if (File.Exists(filename))
                 {
-                    FileStream stream = File.OpenRead(filename);
-                    StreamReader reader = new StreamReader(stream); //Readed to read lines from the file
-
-                    string[] headers = reader.ReadLine().Split(','); //The first line which contains the headers of the columns
-                    string[] columns = new string[headers.Length];
-
-                    for (int i = 0; i < headers.Length; i++)
+                    try
                     {
-                        columns[i] = headers[i].Trim('\"');
+                        FileStream stream = File.OpenRead(filename);
+                        StreamReader reader = new StreamReader(stream); //Readed to read lines from the file
+
+                        this.votesDatabase = new Database();
+
+                        string[] headers = reader.ReadLine().Split(','); //The first line which contains the headers of the columns
+                        string[] columns = new string[headers.Length];
+
+                        for (int i = 0; i < headers.Length; i++)
+                        {
+                            columns[i] = headers[i].Trim('\"');
+                        }
+
+                        this.votesDatabase.addColumns(columns);
+
+                        //Read lines until the file comes to an end
+                        while (!reader.EndOfStream)
+                        {
+                            // Create and populate the datatable
+                            string[] row = reader.ReadLine().Split(',');
+                            this.votesDatabase.addRow(row);
+                        }
+
+                        //Set the data source
+                        votesGridView.DataSource = this.votesDatabase.table;
+                        validateTable();
                     }
-
-                    this.votesDatabase.addColumns(columns);
-
-                    //Read lines until the file comes to an end
-                    while (!reader.EndOfStream)
+                    catch (Exception)
                     {
-                        // Create and populate the datatable
-                        string[] row = reader.ReadLine().Split(',');
-                        this.votesDatabase.addRow(row);
+                        MessageBox.Show("Oops! Something went wrong while opening the file.\nPlease check the format of the file.", "Error!");
                     }
-
-                    //Set the data source
-                    votesGridView.DataSource = this.votesDatabase.table;
-                    votesGridView.AutoResizeColumns();
-                    this.votesDatabase.getCandidates();
-                    validateTable();
                 }
             }
-        }
-
-        private void exportMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         #endregion
@@ -110,35 +117,10 @@ namespace Assignment3_Voting_System
 
         private void votesGridView_CurrentCellChanged(object sender, EventArgs e)
         {
-            calculateFirstPreferences();
+            this.preferencesDatabase.calculateFirstPreferences(this.votesDatabase);
             validateTable();
         }
 
-        private void calculateFirstPreferences()
-        {
-            preferencesDatabase.table.Clear();
-            int[] firstCounts = new int[votesDatabase.getColumnCount()];
-            for (int i = 0; i < votesDatabase.getRowCount(); i++)
-            {
-                string[] currentRow = votesDatabase.getRow(i);
-
-                if (votesDatabase.isValid(currentRow))
-                {
-                    for (int j = 0; j < currentRow.Length; j++)
-                    {
-                        if (currentRow[j].Equals("1"))
-                        {
-                            firstCounts[j]++;
-                        }
-                    }
-                }
-            }
-            string[] columns = votesDatabase.getCandidates();
-            for (int i = 0; i < firstCounts.Length; i++)
-            {
-                preferencesDatabase.addRow(new string[] { columns[i], firstCounts[i].ToString() });
-            }
-        }
 
         #endregion
 
@@ -196,24 +178,29 @@ namespace Assignment3_Voting_System
 
         private void countButton_Click(object sender, EventArgs e)
         {
-
+            countClick();
+            /*
             List<Candidate> candidates = new List<Candidate>();
-            String[] resultsColumns = new string[this.preferencesDatabase.getRowCount()];   // to get columns of result 
-            String[] resultsRow = new string[this.preferencesDatabase.getRowCount()];
-
-            for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
+            this.tempPreferences = new Database(this.preferencesDatabase);
+            this.tempVotes = new Database(this.votesDatabase);
+            
+            String[] resultsColumns = new string[this.tempPreferences.getRowCount()];   // to get columns of result 
+            String[] resultsRow = new string[this.tempPreferences.getRowCount()];
+            
+            
+            for (int i = 0; i < this.tempPreferences.getRowCount(); i++)
             {
-                
-                String name = this.preferencesDatabase.getRow(i)[0];
-                int votes = int.Parse(this.preferencesDatabase.getRow(i)[1]);
+
+                String name = this.tempPreferences.getRow(i)[0];
+                int votes = int.Parse(this.tempPreferences.getRow(i)[1]);
 
 
-                    candidates.Add(new Candidate(name, votes));
-                    // create header for the result database
-                    resultsColumns[i] = name;
-                    // create first raw by copying all items
-                    resultsRow[i] = votes.ToString();
-                
+                candidates.Add(new Candidate(name, votes));
+                // create header for the result database
+                resultsColumns[i] = name;
+                // create first row by copying all items
+                resultsRow[i] = votes.ToString();
+
 
             }
 
@@ -229,20 +216,21 @@ namespace Assignment3_Voting_System
             Candidate winner = null;
             do
             {
-                
+
                 // update candidates 
-                if (candidates.Count!=0){
+                if (candidates.Count != 0)
+                {
                     winner = countVotes(candidates, isTied);
 
 
                     candidates.Clear();
                     candidates = new List<Candidate>();
 
-                    for (int i = 0; i < this.preferencesDatabase.getRowCount(); i++)
+                    for (int i = 0; i < this.tempPreferences.getRowCount(); i++)
                     {
 
-                        String name = this.preferencesDatabase.getRow(i)[0];
-                        int votes = int.Parse(this.preferencesDatabase.getRow(i)[1]);
+                        String name = this.tempPreferences.getRow(i)[0];
+                        int votes = int.Parse(this.tempPreferences.getRow(i)[1]);
 
                         if (name != "" && votes != -1)
                         {
@@ -250,7 +238,7 @@ namespace Assignment3_Voting_System
                             candidates.Add(new Candidate(name, votes));
                             // create header for the result database
                             resultsColumns[i] = name;
-                            // create first raw by copying all items
+                            // create first row by copying all items
                             resultsRow[i] = votes.ToString();
                         }
                         else
@@ -269,9 +257,10 @@ namespace Assignment3_Voting_System
 
             } while (winner == null && isTied == false);
 
-
+            */
             ResultForm resultsForm = new ResultForm(this.resultsDatabase);
             resultsForm.ShowDialog();
+
 
         }
 
@@ -295,7 +284,7 @@ namespace Assignment3_Voting_System
                 winner = candidatWithMaxVotes;
                 int indexOfWinner = candidates.IndexOf(winner);
 
-
+                /*
                 // set everone else as precued 
                 for (int i = 0; i < resultsRow.Length; i++)
                 {
@@ -304,6 +293,7 @@ namespace Assignment3_Voting_System
                         resultsRow[i] = "P";
                     }
                 }
+                */
 
                 Console.WriteLine("WINNER FOUND: " + candidatWithMaxVotes.name);
             }
@@ -311,7 +301,7 @@ namespace Assignment3_Voting_System
 
 
             ///////////////////////////Tie
-            int votes = candidates[0].votes;    // get the votes of one of the candidates
+            int votes = candidates.Max().votes;    // get the votes of one of the candidates
             int votesCount = 0; // counts the candidates that have same number of votes
             foreach (Candidate candidate in candidates)
             {
@@ -354,42 +344,142 @@ namespace Assignment3_Voting_System
             // remove the candidate and distribute the votes
             if (indexToRemove != -1)
             {
-                distributeVotes(indexToRemove);
+                //distributeVotes(indexToRemove);
                 this.preferencesDatabase.updateCandidates(indexToRemove, "");
                 this.preferencesDatabase.updateVotes(indexToRemove, -1);    // when the candidate is precluded set his vots to be -1 and name to be empty in the database
-
                 // need to remove the row 
                 //this.preferencesDatabase.removeRow(new string[] { candidateToPreclude.name, candidateToPreclude.votes.ToString() });
-                
+
 
             }
-
-
             return winner;
-
-
         }
 
 
 
 
-
-
-        private void distributeVotes(int candidate)
+        private void countClick()
         {
-            //Still need to calculate for 2nd, 3rd, 4th etc.
-            //Example:  a   b   c   d
-            //          1   2   3   4
-            //          4   1   3   2
-            //          4   3   2   1
-            //          4   2   1   3
+            this.tempVotes = new Database(this.votesDatabase);
+            this.tempPreferences = new Database();
+            this.tempPreferences.addColumns(new string[] { "Candidates", "Votes" });
+            this.tempPreferences.calculateFirstPreferences(this.tempVotes);
+            this.resultsDatabase = new Database();
+            this.resultsDatabase.addColumns(this.tempVotes.getCandidates());
+            String[] initialVotes = new String[this.tempPreferences.getRowCount()];
+            for (int i = 0; i < this.tempPreferences.getRowCount(); i++)
+            {
+                initialVotes[i] = this.tempPreferences.getRow(i)[1];
+            }
+            this.resultsDatabase.addRow(initialVotes);
 
-            // first run - b gets removed randomly and it vote gets distributed to d
-            // d now has 2 votes
-            // Second run - a gets removed randomly - it had one vote which was to be transfered to b
-            // but since b is deleted, its 3rd preference should be checked which is c so c now has 2 votes
-            // both c and d have 2 - 2 votes (tie)
+            List<int> precluded = new List<int>();
 
+            bool winnerFound = false;
+            bool tie = false;
+            bool votesCalculated = false;
+
+            while (!votesCalculated)
+            {
+                tie = true;
+                int minVotes = int.Parse(this.tempPreferences.getRow(0)[1]);
+
+                String[] votes = resultsDatabase.getRow(resultsDatabase.getRowCount() - 1);
+
+                for (int i = 0; i < votes.Length; i++)
+                {
+                    if (!votes[i].Equals("P"))
+                    {
+                        int vote = int.Parse(votes[i]);
+                        if (vote > this.tempPreferences.getTotalVotes() / 2)
+                        {
+                            winnerFound = true;
+                            Console.WriteLine("Winner Found: " + this.tempPreferences.getRow(i)[0]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < votes.Length && tie; j++)
+                            {
+                                if (!votes[j].Equals("P") && vote != int.Parse(votes[j]))
+                                {
+                                    tie = false;
+                                }
+                            }
+                        }
+                        if (vote < minVotes)
+                        {
+                            minVotes = vote;
+                        }
+                    }
+                }
+
+                List<int> minCandidates = new List<int>();
+                if (!winnerFound && !tie)
+                {
+                    for (int i = 0; i < votes.Length; i++)
+                    {
+                        if (!votes[i].Equals("P"))
+                        {
+                            int vote = int.Parse(votes[i]);
+                            if (minVotes == vote)
+                            {
+                                minCandidates.Add(i);
+                            }
+                        }
+                    }
+                    Random rand = new Random();
+                    int index = rand.Next(0, minCandidates.Count);
+                    precluded.Add(minCandidates[index]);
+                    this.resultsDatabase.addRow(distributeVotes(minCandidates[index], precluded));
+                }
+                Console.WriteLine("Tie: " + tie + "\nWinner: " + winnerFound);
+                if(winnerFound || tie)
+                {
+                    votesCalculated = true;
+                }
+            }
+
+        }
+
+        private String[] distributeVotes(int candidate, List<int> precluded)
+        {
+            for (int i = 0; i < this.tempVotes.getRowCount(); i++)
+            {
+                String[] row = this.tempVotes.getRow(i);
+                if (row[candidate].Equals("1"))
+                {
+                    this.tempVotes.updatePreferences(i);
+                }
+            }
+            
+
+            this.tempPreferences.calculateFirstPreferences(this.tempVotes);
+
+            String[] newRow = new String[this.tempVotes.getColumnCount()];
+
+            for (int i = 0; i < newRow.Length; i++)
+            {
+                if (!precluded.Contains(i))
+                {
+                    newRow[i] = this.tempPreferences.getRow(i)[1];
+                }
+                else
+                {
+                    newRow[i] = "P";
+                }
+                Console.Write(newRow[i]);
+            }
+            Console.WriteLine();
+            return newRow;
+
+
+
+
+
+
+
+
+            /*
             int pref;
             for (int i = 0; i < this.votesDatabase.getRowCount(); i++)
             {
@@ -397,11 +487,11 @@ namespace Assignment3_Voting_System
                 string[] row = this.votesDatabase.getRow(i);
                 if (row[candidate].Equals(pref.ToString()))
                 {
-                    
+
                     for (int j = 0; j < row.Length; j++)
                     {
-                     
-                        if (row[j].Equals((pref + 1).ToString()) )
+
+                        if (row[j].Equals((pref + 1).ToString()))
                         {
 
                             String candidateName = this.votesDatabase.getColumn(j);
@@ -409,7 +499,7 @@ namespace Assignment3_Voting_System
 
                             if (indexOfCandidate != -1)
                             {
-                                if(this.preferencesDatabase.getRow(indexOfCandidate)[1] != "-1")
+                                if (this.preferencesDatabase.getRow(indexOfCandidate)[1] != "-1")
                                 {
                                     int votes = int.Parse(this.preferencesDatabase.getRow(indexOfCandidate)[1]);
                                     votes += 1;
@@ -417,13 +507,13 @@ namespace Assignment3_Voting_System
                                     Console.WriteLine("Vote at " + (i + 1) + " transfered to: " + this.preferencesDatabase.getRow(indexOfCandidate)[0]);
                                     break; // break when the votes are updated
                                 }
-                                
+
 
                             }
                             else
                             {
                                 pref += 1;
-                                j=j-1;
+                                j = j - 1;
                             }
 
 
@@ -431,7 +521,7 @@ namespace Assignment3_Voting_System
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }

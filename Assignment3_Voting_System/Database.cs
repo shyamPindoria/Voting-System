@@ -16,6 +16,16 @@ namespace Assignment3_Voting_System
             this.table = new DataTable();
         }
 
+        public Database(Database d)
+        {
+            this.table = new DataTable();
+            this.addColumns(d.getCandidates());
+            for (int i = 0; i < d.getRowCount(); i++)
+            {
+                this.addRow(d.getRow(i));
+            }
+        }
+
         public void addColumn(string column)
         {
             this.table.Columns.Add(column);
@@ -84,6 +94,19 @@ namespace Assignment3_Voting_System
             }
         }
 
+        public void updatePreferences(int rowIndex)
+        {
+            for (int i = 0; i < this.table.Rows[rowIndex].ItemArray.Length; i++)
+            {
+                int pref = int.Parse(this.table.Rows[rowIndex][i].ToString());
+                this.table.Rows[rowIndex][i] = pref - 1;
+                if (int.Parse(this.table.Rows[rowIndex][i].ToString()) == 0)
+                {
+                    this.table.Rows[rowIndex][i] = int.MaxValue;
+                }
+            }
+        }
+
         public void updateVotes(int index, int value)
 
         {
@@ -143,6 +166,44 @@ namespace Assignment3_Voting_System
                 headers[i] = this.table.Columns[i].ToString();
             }
             return headers;
+        }
+
+        public int getTotalVotes()
+        {
+            int count = 0;
+
+            for (int i = 0; i < this.table.Rows.Count; i++)
+            {
+                count += int.Parse(this.getRow(i)[1]);
+            }
+
+            return count;
+        }
+
+        public void calculateFirstPreferences(Database votesDatabase)
+        {
+            this.table.Rows.Clear();
+            int[] firstCounts = new int[votesDatabase.getColumnCount()];
+            for (int i = 0; i < votesDatabase.getRowCount(); i++)
+            {
+                string[] currentRow = votesDatabase.getRow(i);
+
+                //if (votesDatabase.isValid(currentRow))
+                //{
+                    for (int j = 0; j < currentRow.Length; j++)
+                    {
+                        if (currentRow[j].Equals("1"))
+                        {
+                            firstCounts[j]++;
+                        }
+                    }
+                //}
+            }
+            string[] columns = votesDatabase.getCandidates();
+            for (int i = 0; i < firstCounts.Length; i++)
+            {
+                this.addRow(new string[] { columns[i], firstCounts[i].ToString() });
+            }
         }
 
     }
