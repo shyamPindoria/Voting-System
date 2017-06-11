@@ -17,12 +17,34 @@ namespace Assignment3_Voting_System
         Database resultsDatabse;
 
 
-        public ResultForm(Database database)
+        public ResultForm(Database database, int winner, bool tie)
         {
             InitializeComponent();
             this.resultsDatabse = database;
             this.resultGridView.DataSource = resultsDatabse.table;
+            List<String> result = new List<String>();
+            if (tie)
+            {
+                String[] finalRound = this.resultsDatabse.getRow(this.resultsDatabse.getRowCount() - 1);
+                for (int i = 0; i < resultGridView.ColumnCount; i++)
+                {
+                    if (!finalRound[i].Equals("P"))
+                    {
+                        result.Add(this.resultsDatabse.getColumn(i));
+                    }
+                }
+                this.winnerLabel.Text = result[0] + " tied with " + result[1];
+            }
+            else
+            {
+                this.winnerLabel.Text = resultsDatabse.getColumn(winner) + " won with " + resultsDatabse.getRow(this.resultsDatabse.getRowCount() - 1)[winner] + " votes.";
+            }
 
+
+            for (int i = 0; i < this.resultsDatabse.getRowCount(); i++)
+            {
+                this.resultGridView.Rows[i].HeaderCell.Value = (i + 1).ToString();
+            }
         }
 
         private void exportButton_Click(object sender, EventArgs e)

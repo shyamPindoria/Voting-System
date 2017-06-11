@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.resultGridView = new System.Windows.Forms.DataGridView();
             this.ResultsOverviewGroupBox = new System.Windows.Forms.GroupBox();
             this.winnerGroupBox = new System.Windows.Forms.GroupBox();
             this.visualPresentationGroupBox = new System.Windows.Forms.GroupBox();
             this.graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.exportButton = new System.Windows.Forms.Button();
+            this.winnerLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resultGridView)).BeginInit();
             this.ResultsOverviewGroupBox.SuspendLayout();
+            this.winnerGroupBox.SuspendLayout();
             this.visualPresentationGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.graph)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +59,8 @@
             this.resultGridView.Name = "resultGridView";
             this.resultGridView.ReadOnly = true;
             this.resultGridView.RowTemplate.Height = 24;
-            this.resultGridView.Size = new System.Drawing.Size(530, 397);
+            this.resultGridView.ShowEditingIcon = false;
+            this.resultGridView.Size = new System.Drawing.Size(530, 398);
             this.resultGridView.TabIndex = 0;
             // 
             // ResultsOverviewGroupBox
@@ -78,6 +81,7 @@
             // winnerGroupBox
             // 
             this.winnerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.winnerGroupBox.Controls.Add(this.winnerLabel);
             this.winnerGroupBox.Location = new System.Drawing.Point(9, 434);
             this.winnerGroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.winnerGroupBox.Name = "winnerGroupBox";
@@ -95,7 +99,7 @@
             this.visualPresentationGroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.visualPresentationGroupBox.Name = "visualPresentationGroupBox";
             this.visualPresentationGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.visualPresentationGroupBox.Size = new System.Drawing.Size(291, 414);
+            this.visualPresentationGroupBox.Size = new System.Drawing.Size(291, 482);
             this.visualPresentationGroupBox.TabIndex = 3;
             this.visualPresentationGroupBox.TabStop = false;
             this.visualPresentationGroupBox.Text = "Visual Presentaion";
@@ -106,29 +110,40 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.graph.BackColor = System.Drawing.SystemColors.ButtonFace;
-            chartArea1.Name = "ChartArea1";
-            this.graph.ChartAreas.Add(chartArea1);
+            chartArea5.Name = "ChartArea1";
+            this.graph.ChartAreas.Add(chartArea5);
             this.graph.Location = new System.Drawing.Point(4, 17);
             this.graph.Margin = new System.Windows.Forms.Padding(2);
             this.graph.Name = "graph";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.graph.Series.Add(series1);
-            this.graph.Size = new System.Drawing.Size(283, 397);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.graph.Series.Add(series5);
+            this.graph.Size = new System.Drawing.Size(283, 461);
             this.graph.TabIndex = 0;
             this.graph.Text = "Result Graph";
             // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(762, 512);
+            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportButton.Location = new System.Drawing.Point(551, 499);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(75, 23);
+            this.exportButton.Size = new System.Drawing.Size(291, 36);
             this.exportButton.TabIndex = 4;
             this.exportButton.Text = "Export";
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            // 
+            // winnerLabel
+            // 
+            this.winnerLabel.AutoSize = true;
+            this.winnerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.winnerLabel.Location = new System.Drawing.Point(6, 19);
+            this.winnerLabel.Name = "winnerLabel";
+            this.winnerLabel.Size = new System.Drawing.Size(119, 39);
+            this.winnerLabel.TabIndex = 0;
+            this.winnerLabel.Text = "winner";
             // 
             // ResultForm
             // 
@@ -145,6 +160,8 @@
             this.Text = "Voting System";
             ((System.ComponentModel.ISupportInitialize)(this.resultGridView)).EndInit();
             this.ResultsOverviewGroupBox.ResumeLayout(false);
+            this.winnerGroupBox.ResumeLayout(false);
+            this.winnerGroupBox.PerformLayout();
             this.visualPresentationGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.graph)).EndInit();
             this.ResumeLayout(false);
@@ -159,5 +176,6 @@
         private System.Windows.Forms.GroupBox visualPresentationGroupBox;
         private System.Windows.Forms.DataVisualization.Charting.Chart graph;
         private System.Windows.Forms.Button exportButton;
+        private System.Windows.Forms.Label winnerLabel;
     }
 }

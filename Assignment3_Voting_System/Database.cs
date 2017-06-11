@@ -89,12 +89,19 @@ namespace Assignment3_Voting_System
                 for (int i = 0; i < row.Length; i++)
                 {
                     //Cast the object to strings
-                    row[i] = obj[i].ToString();
+                    if (!obj[i].ToString().Equals(""))
+                    {
+                        row[i] = obj[i].ToString();
+                    }
+                    else
+                    {
+                        row[i] = "";
+                    }
                 }
 
                 return row;
             }
-            catch (InvalidCastException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 //Return a blank array incase something goes wrong
@@ -138,9 +145,11 @@ namespace Assignment3_Voting_System
                 {
                     if (!row.Contains(i.ToString()))
                     {
-                        return false;
+                        if (!row.Contains(int.MaxValue.ToString()))
+                        {
+                            return false;
+                        }
                     }
-
                 }
                 return true;
             }
@@ -220,8 +229,8 @@ namespace Assignment3_Voting_System
                 //Current row in the loop
                 string[] currentRow = votesDatabase.getRow(i);
 
-                //if (votesDatabase.isValid(currentRow))
-                //{
+                if (votesDatabase.isValid(currentRow))
+                {
                     //Look for first preferences in the votes table
                     for (int j = 0; j < currentRow.Length; j++)
                     {
@@ -231,7 +240,7 @@ namespace Assignment3_Voting_System
                             firstCounts[j]++;
                         }
                     }
-                //}
+                }
             }
             //Name of candidates
             string[] columns = votesDatabase.getCandidates();

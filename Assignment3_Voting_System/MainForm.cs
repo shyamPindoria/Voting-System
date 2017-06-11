@@ -178,12 +178,30 @@ namespace Assignment3_Voting_System
         {
             //Update row header every time a row is added
             updateRowHeaders();
+            //Enable the count button when rows are added
+            if (this.votesGridView.RowCount > 1)
+            {
+                countButton.Enabled = true;
+            }
+            else
+            {
+                countButton.Enabled = false;
+            }
         }
 
         private void votesGridView_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
             //Update row headers every time a row is removed
             updateRowHeaders();
+            //Disable the count button when there is no data
+            if (this.votesGridView.RowCount > 1)
+            {
+                countButton.Enabled = true;
+            }
+            else
+            {
+                countButton.Enabled = false;
+            }
         }
 
         #endregion
@@ -211,7 +229,8 @@ namespace Assignment3_Voting_System
 
             //Contains candidates that are precluded
             List<int> precluded = new List<int>();
-
+            //Index of the winner
+            int winner = 0;
             bool winnerFound = false; //True if winner is found
             bool tie = false; //True if there is a tie
             //Loop control
@@ -239,6 +258,7 @@ namespace Assignment3_Voting_System
                         if (vote > this.tempPreferences.getTotalVotes() / 2)
                         {
                             winnerFound = true;
+                            winner = i;
                             Console.WriteLine("Winner Found: " + this.tempPreferences.getRow(i)[0]);
                         }
                         else
@@ -292,7 +312,7 @@ namespace Assignment3_Voting_System
                 }
             }
             //Show the results form once the results have been calculated
-            ResultForm resultsForm = new ResultForm(this.resultsDatabase);
+            ResultForm resultsForm = new ResultForm(this.resultsDatabase, winner, tie);
             resultsForm.ShowDialog();
         }
 
